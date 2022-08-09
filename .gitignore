@@ -1,0 +1,7 @@
+tmp/
+.idea
+.air.toml
+Makefile
+dist/
+.vscode
+database.yml
