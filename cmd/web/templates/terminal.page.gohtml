@@ -66,7 +66,7 @@
         const payButton = document.getElementById("pay-button");
         const processing = document.getElementById("processing-payment");
 
-        stripe = Stripe('pk_test_51KvieLC0SQkZFCmUOGmhBU0d8ctUGLE93pKI5iA5oVYKZvRtbWDBauzNDc9augCuQDS5Vk745nFDAGw2wiY7DCXW000vL2Y2mT');
+        stripe = Stripe({{index .StringMap "publishable_key"}});
 
         function hidePayButton() {
             payButton.classList.add("d-none");
@@ -110,7 +110,7 @@
                 currency: 'usd',
             }
 
-            const requestOption = {
+            const requestOptions = {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',
@@ -119,7 +119,7 @@
                 body: JSON.stringify(payload),
             }
 
-            fetch("http://localhost:4001/api/payment-intent", requestOption)
+            fetch("{{.API}}/api/payment-intent", requestOptions)
                 .then(response => response.text())
                 .then(response => {
                     let data;
@@ -147,6 +147,7 @@
                                     processing.classList.add("d-none");
                                     showCardSuccess();
                                     // would submit the form
+                                    document.getElementById("charge_form").submit();
                                 }
                             }
                         })
