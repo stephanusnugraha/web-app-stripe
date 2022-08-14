@@ -17,17 +17,11 @@
           autocomplete="off" novalidate="">
 
         <input type="hidden" name="product_id" value="{{$widget.ID}}">
-        <input type="hidden" name="amount" value="{{$widget.Price}}">
+        <input type="hidden" name="amount" id="amount" value="{{$widget.Price}}">
 
-        <h3 class="mt-2 text-center mb-3">{{$widget.Name}}: {{$widget.Price}}</h3>
+        <h3 class="mt-2 text-center mb-3">{{$widget.Name}}: {{formatCurrency $widget.Price}}</h3>
         <p>{{$widget.Description}}</p>
         <hr>
-
-        {{/*<div class="mb-3">
-            <label for="amount" class="form-label">Amount</label>
-            <input type="text" class="form-control" id="amount" name="amount"
-                   required="" autocomplete="amount-new">
-        </div>*/}}
 
         <div class="mb-3">
             <label for="cardholder-name" class="form-label">CardHolder Name</label>
