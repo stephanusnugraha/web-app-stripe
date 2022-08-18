@@ -7,6 +7,14 @@ import (
 	"web-app-stripe/internal/card/cards"
 )
 
+// Home displays the home page
+func (app *application) Home(w http.ResponseWriter, r *http.Request) {
+	if err := app.renderTemplate(w, r, "home", &templateData{}); err != nil {
+		app.errorLog.Println(err)
+	}
+}
+
+// VirtualTerminal displays the virtual-terminal page
 func (app *application) VirtualTerminal(w http.ResponseWriter, r *http.Request) {
 	if err := app.renderTemplate(w, r, "terminal", &templateData{}, "stripe-js"); err != nil {
 		app.errorLog.Println(err)
@@ -47,6 +55,12 @@ func (app *application) PaymentSucceeded(w http.ResponseWriter, r *http.Request)
 	lastFour := pm.Card.Last4
 	expiryMonth := pm.Card.ExpMonth
 	expiryYear := pm.Card.ExpYear
+
+	// create a new customer
+
+	// create a new order
+
+	// create a new transaction
 
 	data := make(map[string]interface{})
 	data["cardholder"] = cardHolder
