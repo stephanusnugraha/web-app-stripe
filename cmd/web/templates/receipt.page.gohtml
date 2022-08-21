@@ -5,15 +5,16 @@
 {{end}}
 
 {{define "content"}}
+    {{$txn := index .Data "txn"}}
     <h2 class="mt-5">Payment Succeeded</h2>
         <hr>
-        <p>Payment Intent: {{index .Data "pi"}}
-        <p>Customer Name: {{index .Data "first_name"}} {{index .Data "last_name"}}
-        <p>Email: {{index .Data "email"}}
-        <p>Payment Method: {{index .Data "pm"}}
-        <p>Payment Amount: {{index .Data "pa"}}
-        <p>Currency: {{index .Data "pc"}}
-        <p>Last Four: {{index .Data "last_four"}}
-        <p>Bank Return Code: {{index .Data "bank_return_code"}}
-        <p>Expiry Date: {{index .Data "expiry_month"}}/{{index .Data "expiry_year"}}
+        <p>Payment Intent: {{$txn.PaymentIntentID}}
+        <p>Customer Name: {{$txn.FirstName}} {{$txn.LastName}}
+        <p>Email: {{$txn.Email}}
+        <p>Payment Method: {{$txn.PaymentMethodID}}
+        <p>Payment Amount: {{formatCurrency $txn.PaymentAmount}}
+        <p>Currency: {{$txn.PaymentCurrency}}
+        <p>Last Four: {{$txn.LastFour}}
+        <p>Bank Return Code: {{$txn.BankReturnCode}}
+        <p>Expiry Date: {{$txn.ExpiryMonth}}/{{$txn.ExpiryYear}}
 {{end}}
