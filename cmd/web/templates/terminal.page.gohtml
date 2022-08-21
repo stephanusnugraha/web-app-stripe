@@ -9,7 +9,7 @@
     <hr>
     <div class="alert alert-danger text-center d-none" id="card-messages"></div>
 
-    <form action="/payment-succeeded" method="post"
+    <form action="/virtual-terminal-payment-succeeded" method="post"
           name="charge_form" id="charge_form"
           class="d-block needs-validation charge-form"
           autocomplete="off" novalidate="">
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <input type="hidden" name="amount" id="amount">
+        <input type="text" name="amount" id="amount">
         <input type="hidden" name="payment_intent" id="payment_intent">
         <input type="hidden" name="payment_method" id="payment_method">
         <input type="hidden" name="payment_amount" id="payment_amount">
@@ -59,9 +59,9 @@
 
 {{define "js"}}
     <script>
-        document.getElementById("charge_amount", function (evt) {
+        document.getElementById("charge_amount").addEventListener("change", function (evt) {
             if (evt.target.value !== "") {
-                document.getElementById("amount").value = evt.target.value * 100;
+                document.getElementById("amount").value = parseInt((evt.target.value * 100), 10);
             } else {
                 document.getElementById("amount").value = 0;
             }
