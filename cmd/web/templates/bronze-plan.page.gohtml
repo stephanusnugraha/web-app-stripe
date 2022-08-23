@@ -18,7 +18,7 @@
         <input type="hidden" name="product_id" value="{{$widget.ID}}">
         <input type="hidden" name="amount" id="amount" value="{{$widget.Price}}">
 
-        <h3 class="mt-2 text-center mb-3">{{$widget.Name}}: {{formatCurrency $widget.Price}}</h3>
+        <h3 class="mt-2 text-center mb-3">{{formatCurrency $widget.Price}}/Month</h3>
         <p>{{$widget.Description}}</p>
         <hr>
 
@@ -67,4 +67,105 @@
         <input type="hidden" name="payment_amount" id="payment_amount">
         <input type="hidden" name="payment_currency" id="payment_currency">
     </form>
+{{end}}
+
+{{define "js"}}
+    {{$widget := index .Data "widget"}}
+
+    <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            let card;
+            let stripe;
+            const cardMessages = document.getElementById("card-messages");
+            const payButton = document.getElementById("pay-button");
+            const processing = document.getElementById("processing-payment");
+
+            stripe = Stripe({{.StripePublishableKey}});
+
+            function hidePayButton() {
+                payButton.classList.add("d-none");
+                processing.classList.remove("d-none");
+            }
+
+            function showPayButtons() {
+                payButton.classList.remove("d-none");
+                processing.classList.add("d-none");
+            }
+
+            function showCardError(msg) {
+                cardMessages.classList.add("alert-danger");
+                cardMessages.classList.remove("alert-success");
+                cardMessages.classList.remove("d-none");
+                cardMessages.innerText = msg;
+            }
+
+            function showCardSuccess() {
+                cardMessages.classList.remove("alert-danger");
+                cardMessages.classList.add("alert-success");
+                cardMessages.classList.remove("d-none");
+                cardMessages.innerText = "Transaction Successful";
+            }
+            
+            function val() {
+                let form = document.getElementById("charge_form");
+                if (form.checkValidity() === false) {
+                    this.event.preventDefault();
+                    this.event.stopPropagation();
+                    form.classList.add("was-validated");
+                    return;
+                }
+                form.classList.add("was-validated");
+                hidePayButton();
+
+                let amountToCharge = document.getElementById("amount").value;
+
+                stripe.createPaymentMethod({
+                    type: 'card',
+                    card: card,
+                    billing_details: {
+                      email: document.getElementById("cardholder-email").value,
+                    },
+                }).then(stripePaymentMethodHandler);
+            }
+
+            function StripePaymentMethodHandler(result) {
+                if (result.error) {
+                    showCardError(result.error.message);
+                } else {
+                    // create a customer and subscribe to plan
+                }
+            }
+
+            (function() {
+                // create stripe & elements
+                const elements = stripe.elements();
+                const style = {
+                    base: {
+                        fontSize: '16px',
+                        lineHeight: '24px',
+                    }
+                };
+
+                // create card entry
+                card = elements.create('card', {
+                    style: style,
+                    hidePostalCode: true,
+                });
+
+                card.mount("#card-element");
+
+                // check for input errors
+                card.addEventListener('change', function(event) {
+                    var displayError = document.getElementById("card-errors");
+                    if (event.error) {
+                        displayError.classList.remove('d-none');
+                        displayError.textContent = event.error.message;
+                    } else {
+                        displayError.classList.add('d-none');
+                        displayError.textContent = '';
+
+                    }
+                });
+            })();
+        </script>
 {{end}}
