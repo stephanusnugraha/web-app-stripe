@@ -133,6 +133,30 @@
                     showCardError(result.error.message);
                 } else {
                     // create a customer and subscribe to plan
+                    let payload = {
+                        plan: '{{$widget.planID}}',
+                        payment_method: result.paymentMethod.id,
+                        email: document.getElementById("cardholder-email").value,
+                        last_four: result.paymentMethod.card.last4,
+                    }
+
+                    const requestOptions = {
+                        method: 'post',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload),
+                    }
+
+                    fetch("{{.API}}/api/create-customer-and-subscribe-to-plan", requestOptions)
+                        .then(response => response.json())
+                        .then(function(data) {
+                            console.log(data);
+                            processing.classList.add("d-none");
+                            // set hidden vars
+                            // submit the form
+                        })
                 }
             }
 
