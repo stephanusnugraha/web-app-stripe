@@ -123,18 +123,18 @@
                     type: 'card',
                     card: card,
                     billing_details: {
-                      email: document.getElementById("cardholder-email").value,
+                        email: document.getElementById("cardholder-email").value,
                     },
                 }).then(stripePaymentMethodHandler);
             }
 
-            function StripePaymentMethodHandler(result) {
+            function stripePaymentMethodHandler(result) {
                 if (result.error) {
                     showCardError(result.error.message);
                 } else {
                     // create a customer and subscribe to plan
                     let payload = {
-                        plan: '{{$widget.planID}}',
+                        plan: '{{$widget.PlanID}}',
                         payment_method: result.paymentMethod.id,
                         email: document.getElementById("cardholder-email").value,
                         last_four: result.paymentMethod.card.last4,
