@@ -15,7 +15,7 @@
           class="d-block needs-validation charge-form"
           autocomplete="off" novalidate="">
 
-        <input type="hidden" name="product_id" value="{{$widget.ID}}">
+        <input type="hidden" name="product_id" id="product_id" value="{{$widget.ID}}">
         <input type="hidden" name="amount" id="amount" value="{{$widget.Price}}">
 
         <h3 class="mt-2 text-center mb-3">{{formatCurrency $widget.Price}}/Month</h3>
@@ -134,10 +134,17 @@
                 } else {
                     // create a customer and subscribe to plan
                     let payload = {
+                        product_id : document.getElementById("product_id").value,
                         plan: '{{$widget.PlanID}}',
                         payment_method: result.paymentMethod.id,
                         email: document.getElementById("cardholder-email").value,
                         last_four: result.paymentMethod.card.last4,
+                        card_brand: result.paymentMethod.card.brand,
+                        exp_month: result.paymentMethod.card.exp_month,
+                        exp_year: result.paymentMethod.card.exp_year,
+                        first_name: document.getElementById("first-name").value,
+                        last_name: document.getElementById("last-name").value,
+                        amount: document.getElementById("amount").value,
                     }
 
                     const requestOptions = {
