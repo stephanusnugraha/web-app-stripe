@@ -280,6 +280,7 @@ func (app *application) CreateAuthToken(w http.ResponseWriter, r *http.Request) 
 		app.invalidCredentials(w)
 		return
 	}
+
 	// generate the token
 
 	// send response
