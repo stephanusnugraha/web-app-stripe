@@ -344,15 +344,14 @@ func (app *application) CheckAuthentication(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	//valid user
+	// valid user
 	var payload struct {
 		Error   bool   `json:"error"`
 		Message string `json:"message"`
 	}
-
 	payload.Error = false
 	payload.Message = fmt.Sprintf("authenticated user %s", user.Email)
-	_ = app.writeJSON(w, http.StatusOK, payload)
+	app.writeJSON(w, http.StatusOK, payload)
 }
 
 func (app *application) VirtualTerminalPaymentSucceeded(w http.ResponseWriter, r *http.Request) {
