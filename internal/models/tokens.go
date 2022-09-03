@@ -15,7 +15,7 @@ const (
 
 // Token is the type for authentication tokens
 type Token struct {
-	PlainText string    `json:"plain_text"`
+	PlainText string    `json:"token"`
 	UserID    int64     `json:"-"`
 	Hash      []byte    `json:"-"`
 	Expiry    time.Time `json:"expiry"`
@@ -37,10 +37,8 @@ func GenerateToken(userID int, ttl time.Duration, scope string) (*Token, error) 
 	}
 
 	token.PlainText = base32.StdEncoding.WithPadding(base32.NoPadding).EncodeToString(randomBytes)
-	hash := sha256.Sum256([]byte(token.PlainText))
-
+	hash := sha256.Sum256(([]byte(token.PlainText)))
 	token.Hash = hash[:]
-
 	return token, nil
 }
 
@@ -55,11 +53,8 @@ func (m *DBModel) InsertToken(t *Token, u User) error {
 		return err
 	}
 
-	stmt = `
-		insert into tokens 
-			(user_id, name, email, token_hash, expiry, created_at, updated_at)
-		values
-			(?, ?, ?, ?, ?, ?, ?)`
+	stmt = `insert into tokens (user_id, name, email, token_hash, expiry, created_at, updated_at)
+			values (?, ?, ?, ?, ?, ?, ?)`
 
 	_, err = m.DB.ExecContext(ctx, stmt,
 		u.ID,

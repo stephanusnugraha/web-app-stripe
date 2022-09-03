@@ -5,55 +5,60 @@
 {{end}}
 
 {{define "content"}}
-    <h2 class="mt-3 text-center">Virtual Terminal</h2>
-    <hr>
-    <div class="alert alert-danger text-center d-none" id="card-messages"></div>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="mt-3 text-center">Virtual Terminal</h2>
+            <hr>
+            <div class="alert alert-danger text-center d-none" id="card-messages"></div>
 
-    <form action="" method="post"
-          name="charge_form" id="charge_form"
-          class="d-block needs-validation charge-form"
-          autocomplete="off" novalidate="">
+            <form action="" method="post"
+                  name="charge_form" id="charge_form"
+                  class="d-block needs-validation charge-form"
+                  autocomplete="off" novalidate="">
 
-        <div class="mb-3">
-            <label for="charge_amount" class="form-label">Amount</label>
-            <input type="text" class="form-control" id="charge_amount"
-            required="" autocomplete="charge_amount-new">
+                <div class="mb-3">
+                    <label for="charge_amount" class="form-label">Amount</label>
+                    <input type="text" class="form-control" id="charge_amount"
+                           required="" autocomplete="charge_amount-new">
+                </div>
+
+                <div class="mb-3">
+                    <label for="cardholder-name" class="form-label">Cardholder Name</label>
+                    <input type="text" class="form-control" id="cardholder-name" name="cardholder_name"
+                           required="" autocomplete="cardholder-name-new">
+                </div>
+
+                <div class="mb-3">
+                    <label for="cardholder-email" class="form-label">Cardholder Email</label>
+                    <input type="email" class="form-control" id="cardholder-email" name="email"
+                           required="" autocomplete="cardholder-email-new">
+                </div>
+
+                <div class="mb-3">
+                    <label for="card-element" class="form-label">Credit Card</label>
+                    <div id="card-element" class="form-control"></div>
+                    <div class="alert-danger text-center" id="card-errors" role="alert"></div>
+                    <div class="alert-success text-center" id="card-success" role="alert"></div>
+                </div>
+
+                <hr>
+
+                <a id="pay-button" href="javascript:void(0)" class="btn btn-primary" onclick="val()">Charge Card</a>
+                <div id="processing-payment" class="text-center d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <input type="hidden" name="amount" id="amount">
+                <input type="hidden" name="payment_intent" id="payment_intent">
+                <input type="hidden" name="payment_method" id="payment_method">
+                <input type="hidden" name="payment_amount" id="payment_amount">
+                <input type="hidden" name="payment_currency" id="payment_currency">
+
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label for="cardholder-name" class="form-label">CardHolder Name</label>
-            <input type="text" class="form-control" id="cardholder-name" name="cardholder_name"
-                   required="" autocomplete="cardholder-name-new">
-        </div>
-
-        <div class="mb-3">
-            <label for="cardholder-email" class="form-label">CardHolder Email</label>
-            <input type="email" class="form-control" id="cardholder-email" name="cardholder_email"
-                   required="" autocomplete="cardholder-email-new">
-        </div>
-
-        <div class="mb-3">
-            <label for="card-element" class="form-label">Credit Card</label>
-            <div id="card-element" class="form-control"></div>
-            <div class="alert-danger text-center" id="card-errors" role="alert"></div>
-            <div class="alert-success text-center" id="card-success" role="alert"></div>
-        </div>
-
-        <hr>
-
-        <a id="pay-button" href="javascript:void(0)" class="btn btn-primary" onclick="val()">Charge Card</a>
-        <div id="processing-payment" class="text-center d-none">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-
-        <input type="hidden" name="amount" id="amount">
-        <input type="hidden" name="payment_intent" id="payment_intent">
-        <input type="hidden" name="payment_method" id="payment_method">
-        <input type="hidden" name="payment_amount" id="payment_amount">
-        <input type="hidden" name="payment_currency" id="payment_currency">
-    </form>
+    </div>
 
     <div class="row">
         <div class="col-md-6 offset-md-3 d-none" id="receipt">
@@ -63,7 +68,9 @@
                 <strong>Bank Return Code</strong>: <span id="bank-return-code"></span>
             </p>
             <p>
-                <a class="btn btn-primary" href="/virtual-terminal">Charge another card</a>
+                <a class="btn btn-primary" href="/virtual-terminal">
+                    Charge another card
+                </a>
             </p>
 
         </div>
@@ -74,7 +81,7 @@
 {{define "js"}}
     <script>
         checkAuth();
-        document.getElementById("charge_amount").addEventListener("change", function (evt) {
+        document.getElementById("charge_amount").addEventListener("change", function(evt){
             if (evt.target.value !== "") {
                 document.getElementById("amount").value = parseInt((evt.target.value * 100), 10);
             } else {
@@ -82,6 +89,8 @@
             }
         })
     </script>
+
+
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
@@ -114,7 +123,7 @@
             cardMessages.classList.remove("alert-danger");
             cardMessages.classList.add("alert-success");
             cardMessages.classList.remove("d-none");
-            cardMessages.innerText = "Transaction Successful";
+            cardMessages.innerText = "Transaction successful";
         }
 
         function val() {
@@ -132,14 +141,14 @@
 
             let payload = {
                 amount: amountToCharge,
-                currency: 'usd',
+                currency: 'cad',
             }
 
             const requestOptions = {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload),
             }
@@ -157,7 +166,7 @@
                                     name: document.getElementById("cardholder-name").value,
                                 }
                             }
-                        }).then(function (result) {
+                        }).then(function(result) {
                             if (result.error) {
                                 // card declined, or something went wrong with the card
                                 showCardError(result.error.message);
@@ -167,6 +176,7 @@
                                     // we have charged the card
                                     processing.classList.add("d-none");
                                     showCardSuccess();
+                                    {{/* document.getElementById("charge_form").submit(); */}}
                                     saveTransaction(result);
                                 }
                             }
@@ -179,7 +189,7 @@
                 })
         }
 
-        function SaveTransaction(result) {
+        function saveTransaction(result) {
             let payload = {
                 amount: parseInt(document.getElementById("amount").value, 10),
                 currency: result.paymentIntent.currency,
@@ -187,7 +197,7 @@
                 last_name: "",
                 email: document.getElementById("cardholder-email").value,
                 payment_intent: result.paymentIntent.id,
-                payment_method: result.paymentIntent.method,
+                payment_method: result.paymentIntent.payment_method,
             }
 
             let token = localStorage.getItem("token");
@@ -196,7 +206,7 @@
                 method: "post",
                 headers: {
                     'Accept': 'application/json',
-                    'Content-type': 'application/json',
+                    'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token,
                 },
                 body: JSON.stringify(payload),
@@ -204,7 +214,7 @@
 
             fetch("{{.API}}/api/admin/virtual-terminal-succeeded", requestOptions)
                 .then(response => response.json())
-                .then(function (data) {
+                .then(function(data){
                     console.log(data);
                     processing.classList.add("d-none");
                     showCardSuccess();
@@ -219,7 +229,7 @@
             const style = {
                 base: {
                     fontSize: '16px',
-                    lineHeight: '24px',
+                    lineHeight: '24px'
                 }
             };
 
@@ -228,7 +238,6 @@
                 style: style,
                 hidePostalCode: true,
             });
-
             card.mount("#card-element");
 
             // check for input errors
@@ -240,9 +249,9 @@
                 } else {
                     displayError.classList.add('d-none');
                     displayError.textContent = '';
-
                 }
             });
         })();
     </script>
+
 {{end}}
