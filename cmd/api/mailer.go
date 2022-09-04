@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"embed"
 	"fmt"
+	mail "github.com/xhit/go-simple-mail/v2"
 	"html/template"
+	"time"
 )
 
 //go:embed templates
@@ -41,5 +43,38 @@ func (app *application) SendMail(from, to, subject, tmpl string, data interface{
 
 	plainMessage := tpl.String()
 
+	app.infoLog.Println(formattedMessage, plainMessage)
+
+	// send the mail
+	server := mail.NewSMTPClient()
+	server.Host = app.config.smtp.host
+	server.Port = app.config.smtp.port
+	server.Username = app.config.smtp.username
+	server.Password = app.config.smtp.password
+	server.Encryption = mail.EncryptionTLS
+	server.KeepAlive = false
+	server.ConnectTimeout = 10 * time.Second
+	server.SendTimeout = 10 * time.Second
+
+	smtpClient, err := server.Connect()
+	if err != nil {
+		return err
+	}
+
+	email := mail.NewMSG()
+	email.SetFrom(from).
+		AddTo(to).
+		SetSubject(subject)
+
+	email.SetBody(mail.TextHTML, formattedMessage)
+	email.AddAlternative(mail.TextPlain, plainMessage)
+
+	err = email.Send(smtpClient)
+	if err != nil {
+		app.errorLog.Println(err)
+		return err
+	}
+
+	app.infoLog.Println("send mail")
 	return nil
 }
