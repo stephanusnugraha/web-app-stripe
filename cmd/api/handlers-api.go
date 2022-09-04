@@ -433,7 +433,7 @@ func (app *application) SendPasswordResetEmail(w http.ResponseWriter, r *http.Re
 		Link string
 	}
 
-	data.Link = "http://www.unb.ca"
+	data.Link = "https://www.twitch.tv/"
 
 	//send mail
 	err = app.SendMail("info@widgets.com", "info@widgets.com", "Password Reset Request", "password-reset", data)
