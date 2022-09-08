@@ -40,10 +40,6 @@
                         </ul>
                     </li>
 
-                    <li id="vt-link" class="nav-item d-none">
-                        <a class="nav-link" href="/admin/virtual-terminal">Virtual Terminal</a>
-                    </li>
-
                     {{if eq .IsAuthenticated 1}}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,7 +49,7 @@
                                 <li><a class="dropdown-item" href="/admin/virtual-terminal">Virtual Terminal</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/admin/all-sales">All Sales</a></li>
-                                <li><a class="dropdown-item" href="/admin/all-subscription">All Subscription</a></li>
+                                <li><a class="dropdown-item" href="/admin/all-subscriptions">All Subscriptions</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/logout">Logout</a></li>
                             </ul>
