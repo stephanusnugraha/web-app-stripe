@@ -43,24 +43,31 @@
     .then(function (data) {
         console.log(data);
 
-        data.forEach(function (i){
+        if (data) {
+            data.forEach(function (i) {
+                let newRow = tbody.insertRow();
+                let newCell = newRow.insertCell();
+
+                newCell.innerHTML = `<a href="/admin/sales/${i.id}">Order ${i.id}</a>`;
+
+                newCell = newRow.insertCell();
+                let item = document.createTextNode(i.customer.last_name + ", " + i.customer.first_name);
+                newCell.appendChild(item);
+
+                newCell = newRow.insertCell();
+                item = document.createTextNode(i.widget.name);
+                newCell.appendChild(item);
+
+                newCell = newRow.insertCell();
+                item = document.createTextNode(i.transaction.amount);
+                newCell.appendChild(item);
+            })
+        } else {
             let newRow = tbody.insertRow();
             let newCell = newRow.insertCell();
-
-            newCell.innerHTML = `<a href="/admin/sales/${i.id}">Order ${i.id}</a>`;
-
-            newCell = newRow.insertCell();
-            let item = document.createTextNode(i.customer.last_name + ", " + i.customer.first_name);
-            newCell.appendChild(item);
-
-            newCell = newRow.insertCell();
-            item = document.createTextNode(i.widget.name);
-            newCell.appendChild(item);
-
-            newCell = newRow.insertCell();
-            item = document.createTextNode(i.transaction.amount);
-            newCell.appendChild(item);
-        })
+            newCell.setAttribute("colspan", "4");
+            newCell.innerHTML = "no data available";
+        }
     })
 </script>
 {{end}}
