@@ -58,8 +58,9 @@
                 item = document.createTextNode(i.widget.name);
                 newCell.appendChild(item);
 
+                let cur = formatCurrency(i.transaction.amount);
                 newCell = newRow.insertCell();
-                item = document.createTextNode(i.transaction.amount);
+                item = document.createTextNode(cur);
                 newCell.appendChild(item);
             })
         } else {
@@ -69,5 +70,13 @@
             newCell.innerHTML = "no data available";
         }
     })
+
+    function formatCurrency(amount) {
+        let c = parseFloat(amount/100);
+        return c.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+        })
+    }
 </script>
 {{end}}
