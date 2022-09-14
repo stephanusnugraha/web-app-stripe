@@ -536,7 +536,7 @@ func (app *application) AllSales(w http.ResponseWriter, r *http.Request) {
 		CurrentPage int `json:"page"`
 	}
 
-	err := app.readJSON(w, r, payload)
+	err := app.readJSON(w, r, &payload)
 	if err != nil {
 		app.badRequest(w, r, err)
 		return
@@ -549,11 +549,11 @@ func (app *application) AllSales(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var resp struct {
-		CurrentPage  int `json:"current_page"`
-		PageSize     int `json:"page_size"`
-		LastPage     int `json:"last_page"`
-		TotalRecords int `json:"total_records"`
-		Orders       []*models.Order
+		CurrentPage  int             `json:"current_page"`
+		PageSize     int             `json:"page_size"`
+		LastPage     int             `json:"last_page"`
+		TotalRecords int             `json:"total_records"`
+		Orders       []*models.Order `json:"orders"`
 	}
 
 	resp.CurrentPage = 1
