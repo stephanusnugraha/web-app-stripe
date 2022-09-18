@@ -27,6 +27,25 @@
 
 {{define "js"}}
 <script>
-    let tbody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+    document.addEventListener("DOMContentLoaded", function (){
+        let tbody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+        let token = localStorage.getItem("token");
+
+        const requestOptions = {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            },
+        }
+
+        fetch("{{.API}}/api/admin/all-users", requestOptions)
+            .then(response => response.json())
+            .then(function (data) {
+               console.log(data);
+            })
+    })
+
 </script>
 {{end}}
