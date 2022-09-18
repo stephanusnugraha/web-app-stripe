@@ -44,6 +44,23 @@
             .then(response => response.json())
             .then(function (data) {
                console.log(data);
+               if (data) {
+                   data.forEach(function (i) {
+                       let newRow = tbody.insertRow();
+                       let newCell = newRow.insertCell();
+
+                       newCell.innerHTML = `<a href="/admin/all-users/${i.id}">${i.last_name}, ${i.first_name}</a>`;
+
+                       newCell = newRow.insertCell();
+                       let item = document.createTextNode(i.email);
+                       newCell.appendChild(item);
+                   });
+               } else {
+                    let newRow = tbody.insertRow();
+                    let newCell = tbody.insertCell();
+                    newCell.setAttribute("colspan", "2");
+                    newCell.innerHTML = "no data available";
+               }
             })
     })
 
