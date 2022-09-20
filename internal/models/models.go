@@ -746,7 +746,7 @@ func (m *DBModel) GetAllUsers() ([]*User, error) {
 	return users, nil
 }
 
-func (m *DBModel) oneUser(id int) (User, error) {
+func (m *DBModel) GetOneUser(id int) (User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
