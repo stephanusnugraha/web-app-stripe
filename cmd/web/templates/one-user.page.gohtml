@@ -41,7 +41,7 @@
             </div>
 
             <div class="float-end">
-                <a class="btn btn-danger" href="javascript:void(0);" id="deleteBtn">Delete</a>
+                <a class="btn btn-danger d-none" href="javascript:void(0);" id="deleteBtn">Delete</a>
             </div>
 
             <div class="clearfix"></div>
@@ -50,25 +50,49 @@
 {{end}}
 
 {{define "js"}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        let token = localStorage.getItem("token");
+        let id = window.location.pathname.split("/").pop();
+        let delBtn = document.getElementById("deleteBtn");
+
         document.addEventListener("DOMContentLoaded", function () {
-            let token = localStorage.getItem("token");
-            let id = window.location.pathname.split("/").pop();
+            if (id !== "0") {
+                delBtn.classList.remove("d-none");
 
-            const requestOptions = {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
+                const requestOptions = {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
+                    }
                 }
-            }
 
-            fetch('{{.API}}/api/admin/all-users/' + id, requestOptions)
-                .then(response => response.json())
-                .then(function (data) {
-                    console.log(data);
-                })
+                fetch('{{.API}}/api/admin/all-users/' + id, requestOptions)
+                    .then(response => response.json())
+                    .then(function (data) {
+                        console.log(data);
+                        if (data) {
+                            document.getElementById("first_name").value = data.first_name;
+                            document.getElementById("last_name").value = data.last_name;
+                            document.getElementById("email").value = data.email;
+                        }
+                    })
+            }
+        })
+        delBtn.addEventListener("click", function () {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to undo this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Delete User'
+            }).then((result) => {
+                console.log("would delete user id", id)
+            })
         })
     </script>
 {{end}}
