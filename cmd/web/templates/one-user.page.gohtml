@@ -36,7 +36,7 @@
             <hr>
 
             <div class="float-start">
-                <a class="btn btn-primary" href="javascript:void(0);" id="saveBtn">Save Changes</a>
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="val()" id="saveBtn">Save Changes</a>
                 <a class="btn btn-warning" href="/admin/all-users" id="cancelBtn">Cancel</a>
             </div>
 
@@ -55,6 +55,50 @@
         let token = localStorage.getItem("token");
         let id = window.location.pathname.split("/").pop();
         let delBtn = document.getElementById("deleteBtn");
+        
+        function val() {
+            let form = document.getElementById("user_form");
+            if (form.checkValidity() === false) {
+                this.event.preventDefault();
+                this.event.stopPropagation();
+                form.classList.add("was-validated");
+                return
+            }
+            form.classList.add("was-validated");
+
+            if (document.getElementById("password").value !== document.getElementById("verify_password").value) {
+                Swal.fire("Password do not match!");
+                return;
+            }
+
+            let payload = {
+                id: parseInt(id, 10),
+                first_name: document.getElementById("first_name").value,
+                last_name: document.getElementById("last_name").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value,
+            }
+
+            const requestOptions = {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+                body: JSON.stringify(payload),
+            }
+
+            fetch("{{.API}}/api/admin/all-users/edit" + id, requestOptions)
+                .then(response => response.json())
+                .then(function (data) {
+                    if (data.error) {
+                        Swal.fire("Error: " + data.message);
+                    } else {
+                        location.href = "/admin/all-users";
+                    }
+                })
+        }
 
         document.addEventListener("DOMContentLoaded", function () {
             if (id !== "0") {
