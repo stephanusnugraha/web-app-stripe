@@ -777,7 +777,7 @@ func (m *DBModel) GetOneUser(id int) (User, error) {
 	return u, nil
 }
 
-func (m DBModel) EditUser(u User) error {
+func (m *DBModel) EditUser(u User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -805,12 +805,12 @@ func (m DBModel) EditUser(u User) error {
 	return nil
 }
 
-func (m DBModel) AddUser(u User, hash string) error {
+func (m *DBModel) AddUser(u User, hash string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	stmt := `
-		inserts into users (first_name, last_name, email, password, created_at, updated_at)
+		insert into users (first_name, last_name, email, password, created_at, updated_at)
 		    values (?, ?, ?, ?, ?, ?)
 	`
 
@@ -829,7 +829,7 @@ func (m DBModel) AddUser(u User, hash string) error {
 	return nil
 }
 
-func (m DBModel) DeleteUser(id int) error {
+func (m *DBModel) DeleteUser(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 

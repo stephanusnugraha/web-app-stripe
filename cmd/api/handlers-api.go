@@ -740,7 +740,7 @@ func (app *application) EditUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user models.User
-	err = app.readJSON(w, r, user)
+	err = app.readJSON(w, r, &user)
 	if err != nil {
 		app.badRequest(w, r, err)
 		return
