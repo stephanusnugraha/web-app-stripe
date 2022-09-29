@@ -51,7 +51,12 @@ func main() {
 		version:  version,
 	}
 
-	err := app.serve()
+	err := app.CreateDirIfNotExist("./invoices")
+	if err != nil {
+		return
+	}
+
+	err = app.serve()
 	if err != nil {
 		app.errorLog.Println(err)
 		log.Fatal(err)
